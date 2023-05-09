@@ -1,0 +1,25 @@
+<div>
+    <h2>Productos</h2>
+
+    {{#if user}}
+    <ul>
+        <li>
+            <p>Bienvenido/a {{user.first_name}}</p>
+        </li>
+        <button>
+            <a href="/users/logout">Cerrar Sesión</a>
+        </button>
+    </ul>
+    {{else}}
+    <ul>
+        <li>
+            <a href="/users/login">Iniciar Sesion</a>
+        </li>
+        <li>
+            <a href="/users/signup">Registrarse</a>
+        </li>
+    </ul>
+    {{/if}}
+
+    <div id="contenidoProductos"></div>
+</div>
