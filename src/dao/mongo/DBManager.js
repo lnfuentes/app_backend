@@ -1,5 +1,6 @@
 const cartModel = require('../models/cart.js');
 const productModel = require('../models/product.js');
+const userModel = require('../models/users.js');
 
 class CartManager {
     async read(cart) {
@@ -134,8 +135,8 @@ class ProductManager {
 
     async delete(productId) {
         try{
-                const result = await productModel.findByIdAndDelete(productId);
-                return result;
+            const result = await productModel.findByIdAndDelete(productId);
+            return result;
         } catch(error) {
             throw new Error(error);
         }
@@ -151,4 +152,21 @@ class ProductManager {
     }
 }
 
-module.exports = {CartManager, ProductManager};
+class UserManager {
+    async create(user) {
+        const newUser = await userModel.create(user);
+        return newUser;
+    }
+
+    async findOne(user) {
+        const OneUser = await userModel.findOne(user);
+        return OneUser;
+    }
+
+    async findById(id) {
+        const userById = await userModel.findById(id);
+        return userById;
+    }
+}
+
+module.exports = {CartManager, ProductManager, UserManager};

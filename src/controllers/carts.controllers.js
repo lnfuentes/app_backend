@@ -1,6 +1,7 @@
-const {CartManager} = require('../dao/data/DBManager.js');
+const DATA = require('../dao/factory.js');
 const cartsCtrl = {};
 
+const {CartManager} = DATA;
 const cartManager = new CartManager();
 
 cartsCtrl.getCarts = async (req, res) => {

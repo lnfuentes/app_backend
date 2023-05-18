@@ -1,11 +1,14 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const GitHubStrategy = require('passport-github2');
-const userModel = require('../dao/models/users.js');
+const DATA = require('../dao/factory.js');
 const {isValidPassword} = require('../utils.js');
 const dotenv = require('dotenv');
 
 dotenv.config();
+
+const {UserManager} = DATA;
+const userManager = new UserManager();
 
 const initializePassport = () => {
 
@@ -13,15 +16,25 @@ const initializePassport = () => {
         usernameField: 'username'
     }, async (username, password, done) => {
         try {
-            const user = await userModel.findOne({email: username});
-            if(!user) {
-                return done(null, false, {message: 'Usuario no encontrado'})
+            const user = {
+                username: 'admin@admin.com',
+                password: 'adminpassword',
+                role: 'admin'
+            } 
+            if(username === user.username && password === user.password){
+                console.log(user);
+                return done(null, false, user)
             } else {
-                const match = isValidPassword(password, user.password);
-                if(match) {
-                    return done(null, user);
+                const user = await userManager.findOne({email: username});
+                if(!user) {
+                    return done(null, false, {message: 'Usuario no encontrado'})
                 } else {
-                    return done(null, false, {message: 'Contraseña incorrecta'});
+                    const match = isValidPassword(password, user.password);
+                    if(match) {
+                        return done(null, user);
+                    } else {
+                        return done(null, false, {message: 'Contraseña incorrecta'});
+                    }
                 }
             }
         } catch (error) {
@@ -36,7 +49,7 @@ const initializePassport = () => {
     }, async (accessToken, refreshToken, profile, done) => {
         try{
             console.log(profile);
-            const user = await userModel.findOne({email: profile._json.email});
+            const user = await userManager.findOne({email: profile._json.email});
             if(!user) {
                 const newUser = {
                     first_name: profile._json.name,
@@ -45,7 +58,7 @@ const initializePassport = () => {
                     email: profile._json.email,
                     password:''
                 }
-                const user = await userModel.create(newUser);
+                const user = await userManager.create(newUser);
                 done(null, user);
             } else {
                 done(null, user);
@@ -61,7 +74,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-    let user = await userModel.findById(id);
+    let user = await userManager.findById(id);
     done(null, user);
 });
 

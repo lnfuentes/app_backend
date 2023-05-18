@@ -1,7 +1,8 @@
 const productModel = require('../dao/models/product.js');
-const {ProductManager} = require('../dao/data/DBManager.js');
+const DATA = require('../dao/factory.js');
 const productsCtrl = {};
 
+const {ProductManager} = DATA;
 const productManager = new ProductManager();
 
 productsCtrl.getProducts = async (req, res) => {

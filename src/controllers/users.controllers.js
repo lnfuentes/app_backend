@@ -1,7 +1,10 @@
-const userModel = require('../dao/models/users.js');
+const DATA = require('../dao/factory.js');
 const {createHash} = require('../utils.js');
 const passport = require('passport');
 const usersCtrl = {};
+
+const {UserManager} = DATA;
+const userManager = new UserManager();
 
 usersCtrl.renderSignupForm = (req, res) => {
     res.render('signup', {title: 'Registro'});
@@ -11,7 +14,7 @@ usersCtrl.signup = async (req, res) => {
     try {
         let errors = [];
         const {first_name, last_name, email, age, password} = req.body;
-        const userEmail = await userModel.findOne({email: email});
+        const userEmail = await userManager.findOne({email: email});
         
         if(!first_name || !last_name || !email || !age || !password) {
             errors.push({message: 'Todos los campos son obligatorios'});
@@ -31,7 +34,7 @@ usersCtrl.signup = async (req, res) => {
                 age,
                 password: createHash(password)
             }
-            await userModel.create(newUser);
+            await userManager.create(newUser);
             req.flash('success_msg', 'Usuario registrado correctamente');
             res.status(201).redirect('/users/login');
         }
