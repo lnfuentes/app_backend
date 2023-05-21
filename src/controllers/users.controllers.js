@@ -1,6 +1,7 @@
 const DATA = require('../dao/factory.js');
 const {createHash} = require('../utils.js');
 const passport = require('passport');
+const redirectByRole = require('../middleware/auth.js');
 const usersCtrl = {};
 
 const {UserManager} = DATA;
@@ -32,6 +33,7 @@ usersCtrl.signup = async (req, res) => {
                 last_name,
                 email,
                 age,
+                role: 'user',
                 password: createHash(password)
             }
             await userManager.create(newUser);
@@ -51,7 +53,11 @@ usersCtrl.renderLoginForm = (req, res) => {
     res.render('login', {title: 'Iniciar Sesion'});
 }
 
-usersCtrl.login = passport.authenticate('login', {failureRedirect: 'login', successRedirect:'/views/products', failureFlash: true});
+usersCtrl.login = (req, res) => {
+    passport.authenticate('login', { failureRedirect: 'login', failureFlash: true })(req, res, () => {
+        redirectByRole(req, res);
+    });
+} 
 
 usersCtrl.logout = (req, res, next) => {
     try {

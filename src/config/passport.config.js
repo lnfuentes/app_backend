@@ -16,25 +16,15 @@ const initializePassport = () => {
         usernameField: 'username'
     }, async (username, password, done) => {
         try {
-            const user = {
-                username: 'admin@admin.com',
-                password: 'adminpassword',
-                role: 'admin'
-            } 
-            if(username === user.username && password === user.password){
-                console.log(user);
-                return done(null, false, user)
+            const user = await userManager.findOne({email: username});
+            if(!user) {
+                return done(null, false, {message: 'Usuario no encontrado'})
             } else {
-                const user = await userManager.findOne({email: username});
-                if(!user) {
-                    return done(null, false, {message: 'Usuario no encontrado'})
+                const match = isValidPassword(password, user.password);
+                if(match) {
+                    return done(null, user);
                 } else {
-                    const match = isValidPassword(password, user.password);
-                    if(match) {
-                        return done(null, user);
-                    } else {
-                        return done(null, false, {message: 'Contraseña incorrecta'});
-                    }
+                    return done(null, false, {message: 'Contraseña incorrecta'});
                 }
             }
         } catch (error) {
@@ -48,7 +38,6 @@ const initializePassport = () => {
         callbackURL: 'http://localhost:8080/users/githubcallback'
     }, async (accessToken, refreshToken, profile, done) => {
         try{
-            console.log(profile);
             const user = await userManager.findOne({email: profile._json.email});
             if(!user) {
                 const newUser = {

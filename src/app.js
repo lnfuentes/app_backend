@@ -13,6 +13,7 @@ const productRouter = require('./routes/products.routes.js');
 const cartRouter = require('./routes/carts.routes.js');
 const viewsRouter = require('./routes/views.routes.js');
 const usersRouter = require('./routes/users.routes.js');
+const ticketRouter = require('./routes/tickets.routes.js');
 
 // SETTINGS
 dotenv.config();
@@ -79,6 +80,7 @@ app.use((req, res, next) => {
 
 // ROUTES
 app.use('/api/products', productRouter);
-app.use('/api/cart', cartRouter);
+app.use('/cart', cartRouter);
 app.use('/views', viewsRouter);
 app.use('/users', usersRouter);
+app.use('/tickets', ticketRouter);

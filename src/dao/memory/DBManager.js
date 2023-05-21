@@ -142,9 +142,29 @@ class UserManager {
   }
 }
 
+class TicketManager {
+  constructor() {
+    this.tickets = [];
+  }
+
+  async getTickets() {
+    return this.tickets;
+  }
+
+  async getTicketId(id) {
+    const ticket = this.tickets.find(ticket => ticket.id === id);
+    return ticket;
+  }
+
+  async createTicket(ticket) {
+    const newTicket = { id: generateUniqueId(), ...ticket };
+    this.tickets.push(newTicket);
+    return newTicket;
+  }
+}
 
 function generateUniqueId() {
 return Math.random().toString(36).substring(2);
 }
 
-module.exports = { CartManager, ProductManager, UserManager };
+module.exports = { CartManager, ProductManager, UserManager, TicketManager };

@@ -1,13 +1,11 @@
-const redirectByRole = (role) => {
-    return function(req, res, next) {
-        if (req.isAuthenticated() && req.user.role === role) {
-            if (role === 'admin') {
-                res.redirect('/');
-            } 
-        } else {
-            next();
-        }
-    };
+const redirectByRole = (req, res) => {
+    if (req.user.role === 'admin') {
+        return res.redirect('/api/products');
+    } else if(req.user.role === 'user') {
+        return res.redirect('/views/products');
+    } else {
+        return res.redirect('/users/login')
+    }
 }
 
 module.exports = redirectByRole;

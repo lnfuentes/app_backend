@@ -26,7 +26,7 @@ const convertParamsToQuery = (params) => {
     return query;
 };
 
-const fetchContenidoProductos = async () => {
+const fetchProducts = async () => {
     const url = getCurrentURL()
     const params = getParameters(url);
     const query = convertParamsToQuery(params)
@@ -58,7 +58,23 @@ const fetchContenidoProductos = async () => {
     });
 }  
 
-elementExist('contenidoProductos') && fetchContenidoProductos();
+elementExist('contenidoProductos') && fetchProducts();
+
+const fetchCart = async () => {
+  const response = await fetch(`http://localhost:8080/cart`);
+  const data = await response.json();
+  const myElement = document.getElementById("contenidoCarrito");
+  data[0].products.forEach(p => {
+    return myElement.innerHTML = `
+      <div>
+        <p>${p.product.title}</p>
+        <p>${p.quantity}</p>
+      </div>
+  `
+  })
+}
+
+elementExist('contenido carrito') && fetchCart();
 
 const fetchProducto = async () => {
     const url = getCurrentURL();

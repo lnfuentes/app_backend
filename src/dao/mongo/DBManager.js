@@ -1,5 +1,6 @@
 const cartModel = require('../models/cart.js');
 const productModel = require('../models/product.js');
+const ticketModel = require('../models/ticket.js');
 const userModel = require('../models/users.js');
 
 class CartManager {
@@ -73,9 +74,9 @@ class CartManager {
         const cart = await cartModel.find({_id: cartId});
         const newProduct = {product: productId, quantity: 1};
         const Nproducts = cart[0].products;
-
+        
         Nproducts.forEach((p, index) => {
-            if(productId === p._id.valueOf()) {
+            if(productId === p.product._id.valueOf()) {
                 i = index;
             }
         });
@@ -169,4 +170,21 @@ class UserManager {
     }
 }
 
-module.exports = {CartManager, ProductManager, UserManager};
+class TicketManager {
+    async getTickets() {
+        const tickets = await ticketModel.find();
+        return tickets;
+    }
+
+    async getTicketId(id) {
+        const ticket = await ticketModel.findById(id);
+        return ticket;
+    }
+
+    async create(ticket) {
+        const myTicket = await ticketModel.create(ticket);
+        return myTicket;
+    }
+}
+
+module.exports = {CartManager, ProductManager, UserManager, TicketManager};

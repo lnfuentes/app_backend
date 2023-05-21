@@ -12,7 +12,8 @@ switch (DB_TYPE) {
         DATA = {
             CartManager: DBManagerMongo.CartManager,
             ProductManager: DBManagerMongo.ProductManager,
-            UserManager: DBManagerMongo.UserManager
+            UserManager: DBManagerMongo.UserManager,
+            TicketManager: DBManagerMongo.TicketManager
         };
 
         break;
@@ -23,7 +24,8 @@ switch (DB_TYPE) {
         DATA = {
             CartManager: DBManagerMemory.CartManager,
             ProductManager: DBManagerMemory.ProductManager,
-            UserManager: DBManagerMemory.UserManager
+            UserManager: DBManagerMemory.UserManager,
+            TicketManager: DBManagerMemory.TicketManager
         };
 
         break;

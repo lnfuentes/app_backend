@@ -36,9 +36,8 @@ cartsCtrl.addProductCart = async (req, res) => {
       res.send({
         message: "Carrito actualizado", result});
     } catch (err) {
-      res.status(500).send("Cart not found");
-      const error = err.message;
-      console.log(error);
+        const error = err.message;
+        res.status(500).send("Cart not found: " + error);
     }
 }
 
