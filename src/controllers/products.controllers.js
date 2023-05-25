@@ -66,7 +66,7 @@ productsCtrl.getProducts = async (req, res) => {
 
 productsCtrl.createProduct = async (req, res) => {
     const {title, description, code, price, status, stock, category, thumbnail} = req.body;
-    if(!title || !description || !code || !price || !thumbnail || !stock || !category || !status) {
+    if(!title || !description || !code || !price || !thumbnail || !category || !status) {
         res.status(400).send({error: 'Faltan Datos'});
         return;
     }

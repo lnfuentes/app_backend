@@ -34,17 +34,32 @@ const fetchProducts = async () => {
     const data = await response.json();
     const myElement = document.getElementById("contenidoProductos");
     myElement.innerHTML = data.result.payload.map((product) => {
-      return `
-              <div class="card col-3">
-                  <img src="${product.thumbnail}" class="card-img-top" alt="...">
-                  <div class="card-body">
-                  <h5 class="card-title">${product.title}</h5>
-                  <p class="card-text">${product.description}</p>
-                  <p class="card-text">${product.price}</p>
-                  <a href="#" id=${product._id} class="btn btn-primary">Añadir</a>
-                  </div>
-              </div>
-              `;
+      if(product.stock === 0){
+        return `
+                <div class="card col-3">
+                    <img src="${product.thumbnail}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">${product.title}</h5>
+                    <p class="card-text">${product.description}</p>
+                    <p class="card-text">${product.price}</p>
+                    <p class="card-text">¡Producto sin stock!</p>
+                    </div>
+                </div>
+                `;
+      } else {
+        return `
+                <div class="card col-3">
+                    <img src="${product.thumbnail}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">${product.title}</h5>
+                    <p class="card-text">${product.description}</p>
+                    <p class="card-text">${product.price}</p>
+                    <p class="card-text">${product.stock}</p>
+                    <a href="#" id=${product._id} class="btn btn-primary">Añadir</a>
+                    </div>
+                </div>
+                `;
+      }
     });
 
     const buttons = document.querySelectorAll(".btn");

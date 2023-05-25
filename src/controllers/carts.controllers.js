@@ -1,8 +1,9 @@
 const DATA = require('../dao/factory.js');
 const cartsCtrl = {};
 
-const {CartManager} = DATA;
+const {CartManager, ProductManager} = DATA;
 const cartManager = new CartManager();
+const productManager = new ProductManager();
 
 cartsCtrl.getCarts = async (req, res) => {
     try {
@@ -32,9 +33,20 @@ cartsCtrl.addProductCart = async (req, res) => {
     try {
       const {cid} = req.params;
       const {pid} = req.params;
-      const result = await cartManager.updateCartProd(cid, pid);
-      res.send({
-        message: "Carrito actualizado", result});
+      const product = await productManager.findById(pid);
+      let currentStock = product.stock;
+      const newStock = currentStock -1;
+      if(!product) {
+          res.status(500).send('Product not found');
+        } else {
+            if(product.stock > 0) {
+                const result = await cartManager.updateCartProd(cid, pid);
+                await productManager.updateField(pid, 'stock', newStock)
+                res.send({message: "Carrito actualizado", result});
+            } else {
+                res.status(500).send('Insufficient stock');
+            }
+      }
     } catch (err) {
         const error = err.message;
         res.status(500).send("Cart not found: " + error);

@@ -118,6 +118,11 @@ class ProductManager {
         }
         return null;
     }
+
+    findById(pid) {
+      const product = this.products.find(p => p._id === pid);
+      return product;
+    }
 }
 
 class UserManager {
@@ -125,18 +130,18 @@ class UserManager {
     this.users = []; 
   }
 
-  async create(user) {
+  create(user) {
     const newUser = { ...user, id: generateUniqueId() };
     this.users.push(newUser);
     return newUser;
   }
 
-  async findOne(user) {
+  findOne(user) {
     const foundUser = this.users.find((u) => u.username === user.username); 
     return foundUser;
   }
 
-  async findById(id) {
+  findById(id) {
     const foundUser = this.users.find((u) => u.id === id);
     return foundUser;
   }
@@ -147,16 +152,16 @@ class TicketManager {
     this.tickets = [];
   }
 
-  async getTickets() {
+  getTickets() {
     return this.tickets;
   }
 
-  async getTicketId(id) {
+  getTicketId(id) {
     const ticket = this.tickets.find(ticket => ticket.id === id);
     return ticket;
   }
 
-  async createTicket(ticket) {
+  createTicket(ticket) {
     const newTicket = { id: generateUniqueId(), ...ticket };
     this.tickets.push(newTicket);
     return newTicket;

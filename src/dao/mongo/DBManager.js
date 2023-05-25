@@ -151,6 +151,24 @@ class ProductManager {
             throw new Error(error);
         }
     }
+
+    async updateField(pid, field, value) {
+        try {
+            const result = await productModel.findByIdAndUpdate(pid, {[field]: value});
+            return result;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
+    async findById(pid) {
+        try {
+            const result = await productModel.findById(pid);
+            return result
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
 }
 
 class UserManager {
