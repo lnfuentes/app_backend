@@ -166,7 +166,8 @@ class ProductManager {
             const result = await productModel.findById(pid);
             return result
         } catch (error) {
-            throw new Error(error);
+            console.log(error)
+            // throw new Error(error);
         }
     }
 }

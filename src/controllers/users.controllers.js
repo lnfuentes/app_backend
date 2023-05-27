@@ -8,7 +8,7 @@ const {UserManager} = DATA;
 const userManager = new UserManager();
 
 usersCtrl.renderSignupForm = (req, res) => {
-    res.render('signup', {title: 'Registro'});
+    res.render('signup', {title: 'Registro', style: '/css/signup.css'});
 }
 
 usersCtrl.signup = async (req, res) => {
@@ -26,7 +26,7 @@ usersCtrl.signup = async (req, res) => {
         }
     
         if(errors.length > 0) {
-            res.render('signup', {title: 'Registro', errors, first_name, last_name, email, age});
+            res.render('signup', {title: 'Registro', style: '/css/signup.css', errors, first_name, last_name, email, age});
         } else {
             const newUser = {
                 first_name,
@@ -50,7 +50,7 @@ usersCtrl.gitHub = passport.authenticate('github', {scope:['user: email']});
 usersCtrl.gitHubCallback = passport.authenticate('github', {failureRedirect: 'signup', successRedirect: '/views/products'})
 
 usersCtrl.renderLoginForm = (req, res) => {
-    res.render('login', {title: 'Iniciar Sesion'});
+    res.render('login', {title: 'Iniciar Sesion', style: '/css/login.css'});
 }
 
 usersCtrl.login = (req, res) => {

@@ -1,8 +1,17 @@
-<h1>Iniciar Sesion</h1>
-
-<form action="/users/login" method="POST">
-    <input type="email" name="username" placeholder="Usuario">
-    <input type="password" name="password" placeholder="Contraseña">
-    <button type="submit">Iniciar Sesion</button>
-    <a href="/users/signup">Registrarse</a>
-</form>
+<div class="container">
+    <div class="grid_form">
+        <h3>Inicia sesión</h3>
+        <form action="/users/login" method="POST" class="form">
+            <div class="form-floating mb-3">
+                <input type="email" name="username" class="form-control" id="floatingInput" placeholder="usuario@example.com">
+                <label for="floatingInput">Usuario</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Contraseña">
+                <label for="floatingPassword">Contraseña</label>
+            </div>
+            <button type="submit" class="btn-submit">Iniciar Sesión</button>
+            <a href="/users/signup" class="btn-register">Registrarse</a>
+        </form>
+    </div>
+</div>

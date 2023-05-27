@@ -1,0 +1,10 @@
+.line{
+    height: 1px;
+    background-color: #191919;
+    width: 50%;
+    margin-bottom: 50px;
+}
+
+.gap{
+    margin: 20px;
+}

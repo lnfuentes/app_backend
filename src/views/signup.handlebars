@@ -1,11 +1,29 @@
-<h1>Crear Cuenta</h1>
-
-<form action="/users/signup" method="POST">
-    <input type="text" name="first_name" placeholder="Nombre" value="{{first_name}}">
-    <input type="text" name="last_name" placeholder="Apellido" value="{{last_name}}">
-    <input type="email" name="email" placeholder="E-mail" value="{{email}}">
-    <input type="number" name="age" placeholder="Edad" value="{{age}}">
-    <input type="password" name="password" placeholder="Contraseña">
-    <button type="submit">Registrarse</button>
-    <button><a href="/users/github">GitHub</a></button>
-</form>
+<div class="container">
+    <div class="grid_form">
+        <h3>Crear cuenta</h3>
+        <form action="/users/signup" method="POST" class="form">
+            <div class="form-floating mb-3">
+                <input type="text" name="first_name" class="form-control" id="floatingInput" placeholder="Nombre" value={{first_name}}>
+                <label for="floatingInput">Nombre</label>
+            </div>
+            <div class="form-floating">
+                <input type="text" name="last_name" class="form-control" id="floatingPassword" placeholder="Apellido" value={{last_name}}>
+                <label for="floatingPassword">Contraseña</label>
+            </div>
+            <div class="form-floating">
+                <input type="email" name="email" class="form-control" id="floatingPassword" placeholder="E-mail" value={{email}}>
+                <label for="floatingPassword">E-mail</label>
+            </div>
+            <div class="form-floating">
+                <input type="number" name="age" class="form-control" id="floatingPassword" placeholder="Edad" value={{age}}>
+                <label for="floatingPassword">Edad</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Contraseña">
+                <label for="floatingPassword">Contraseña</label>
+            </div>
+            <button type="submit" class="btn-submit">Registrarse</button>
+            <a href="/users/github" class="btn-register">GitHub</a>
+        </form>
+    </div>
+</div>

@@ -8,12 +8,15 @@ const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-acce
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
+const compression = require('express-compression');
 const {initializePassport} = require('./config/passport.config.js')
+const errorHandler = require('./middleware/errors/index.js');
 const productRouter = require('./routes/products.routes.js');
 const cartRouter = require('./routes/carts.routes.js');
 const viewsRouter = require('./routes/views.routes.js');
 const usersRouter = require('./routes/users.routes.js');
 const ticketRouter = require('./routes/tickets.routes.js');
+const mockingRouter = require('./routes/mockingProducts.routes.js');
 
 // SETTINGS
 dotenv.config();
@@ -31,6 +34,9 @@ app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
 
 // MIDDLEWARES
+app.use(compression({
+    brotli: {enable: true, zlib: {}}
+}));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(session({
@@ -79,8 +85,10 @@ app.use((req, res, next) => {
 });
 
 // ROUTES
+app.use(viewsRouter);
 app.use('/api/products', productRouter);
 app.use('/cart', cartRouter);
-app.use('/views', viewsRouter);
 app.use('/users', usersRouter);
 app.use('/tickets', ticketRouter);
+app.use('/mockingProducts', mockingRouter);
+app.use(errorHandler);

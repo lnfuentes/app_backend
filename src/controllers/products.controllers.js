@@ -1,5 +1,8 @@
 const productModel = require('../dao/models/product.js');
 const DATA = require('../dao/factory.js');
+const CustomError = require('../services/error/customError.js');
+const EErrors = require('../services/error/enum.js');
+const generateProductsErrorInfo = require('../services/error/info.js');
 const productsCtrl = {};
 
 const {ProductManager} = DATA;
@@ -64,18 +67,23 @@ productsCtrl.getProducts = async (req, res) => {
     }
 }
 
-productsCtrl.createProduct = async (req, res) => {
-    const {title, description, code, price, status, stock, category, thumbnail} = req.body;
-    if(!title || !description || !code || !price || !thumbnail || !category || !status) {
-        res.status(400).send({error: 'Faltan Datos'});
-        return;
-    }
-
+productsCtrl.createProduct = async (req, res, next) => {
     try {
+        const {title, description, code, price, status, stock, category, thumbnail} = req.body;
+        if(!title || !description || !code || !price || !thumbnail || !category || !status) {
+            // res.status(400).send({error: 'Faltan Datos'});
+            CustomError.createError({
+                name:"Product creation error",
+                cause: generateProductsErrorInfo({title,description,code,price,thumbnail,stock,category,status}),
+                message: "Error trying to create Product",
+                code: EErrors.INVALID_TYPES_ERROR
+            })
+        }
+
         const result = await productManager.create({title, description, code, price, thumbnail, stock, status, category});
         res.status(200).send({message: "Producto Creado", result});
     } catch (error) {
-        res.status(500).send(error.message);
+        next(error);
     }
 }
 
