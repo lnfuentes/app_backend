@@ -1,7 +1,7 @@
-const Router = require('express');
+const {Router} = require('express');
 const router = Router();
 
-const {getCarts, getCartId, createCart, addProductCart, deleteCart, deleteCartProduct, deleteAllProducts, updateCart, updateProductQuantity} = require('../controllers/carts.controllers.js');
+const {getCarts ,getCartId, createCart, addProductCart, deleteCart, deleteCartProduct, deleteAllProducts, updateCart, updateProductQuantity} = require('../controllers/carts.controllers.js');
 
 router.get('/', getCarts);
 

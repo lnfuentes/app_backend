@@ -9,6 +9,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const compression = require('express-compression');
+const methodOverride = require('method-override');
 const {initializePassport} = require('./config/passport.config.js')
 const errorHandler = require('./middleware/errors/index.js');
 const productRouter = require('./routes/products.routes.js');
@@ -47,6 +48,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session())
 app.use(flash());
+app.use(methodOverride('_method'));
 
 // STATICS FILES
 app.use(express.static('public'));
@@ -87,7 +89,7 @@ app.use((req, res, next) => {
 // ROUTES
 app.use(viewsRouter);
 app.use('/api/products', productRouter);
-app.use('/cart', cartRouter);
+app.use('/api/carts', cartRouter);
 app.use('/users', usersRouter);
 app.use('/tickets', ticketRouter);
 app.use('/mockingProducts', mockingRouter);

@@ -16,8 +16,12 @@ cartsCtrl.getCarts = async (req, res) => {
 }
 
 cartsCtrl.getCartId = async (req, res) => {
-    const cartId = await cartManager.getCartById(req.params.cid);
-    res.status(200).send(cartId);
+    try{
+        const cartId = await cartManager.getCartById(req.params.cid);
+        res.status(200).send(cartId);
+    } catch(error) {
+        res.status(500).send(error.message);
+    }
 }
 
 cartsCtrl.createCart = async (req, res) => {

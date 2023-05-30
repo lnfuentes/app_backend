@@ -1,7 +1,8 @@
 const DATA = require('../dao/factory.js');
 const {createHash} = require('../utils.js');
 const passport = require('passport');
-const redirectByRole = require('../middleware/auth.js');
+const {redirectByRole} = require('../middleware/auth.js');
+const transporter = require('../config/mailer.js');
 const usersCtrl = {};
 
 const {UserManager} = DATA;
@@ -37,6 +38,14 @@ usersCtrl.signup = async (req, res) => {
                 password: createHash(password)
             }
             await userManager.create(newUser);
+
+            let info = await transporter.sendMail({
+                from: '"Usuario registrado" <app-backend@gmail.com>', // sender address
+                to: newUser.email, // list of receivers
+                subject: `Bienvenido ${first_name}`, // Subject line
+                html: "<b>Bienvenido a la aplicacion backend</b>", // html body
+            });
+
             req.flash('success_msg', 'Usuario registrado correctamente');
             res.status(201).redirect('/users/login');
         }
@@ -47,7 +56,7 @@ usersCtrl.signup = async (req, res) => {
 
 usersCtrl.gitHub = passport.authenticate('github', {scope:['user: email']});
 
-usersCtrl.gitHubCallback = passport.authenticate('github', {failureRedirect: 'signup', successRedirect: '/views/products'})
+usersCtrl.gitHubCallback = passport.authenticate('github', {failureRedirect: 'signup', successRedirect: '/'})
 
 usersCtrl.renderLoginForm = (req, res) => {
     res.render('login', {title: 'Iniciar Sesion', style: '/css/login.css'});

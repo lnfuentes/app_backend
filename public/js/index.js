@@ -55,7 +55,7 @@ const fetchProducts = async () => {
                   <p class="card-text">${product.description}</p>
                   <p class="card-text">${product.price}</p>
                   <p class="card-text">${product.stock}</p>
-                  <a href="/product/${product._id}" class="btn btn-primary">Añadir</a>
+                  <a href="/product/${product._id}" class="btn btn-primary">Detalles</a>
                 </div>
               </div>
               `;
@@ -80,3 +80,31 @@ const fetchCart = async () => {
 }
 
 elementExist('contenido carrito') && fetchCart();
+
+const addToCartLink = document.getElementById('add-to-cart');
+console.log(addToCartLink);
+addToCartLink.addEventListener('click', e => {
+  e.preventDefault();
+  const cid = addToCartLink.dataset.cid;
+  const pid = addToCartLink.dataset.pid;
+  addToCart(cid, pid);
+});
+
+const addToCart = (cartId, productId) => {
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+  
+  fetch(`/api/carts/${cartId}/${productId}`, options)
+    .then(response => {
+      if (response.ok) {
+        console.log('Producto agregado al carrito');
+      }
+    })
+    .catch(error => {
+      console.error('Error de red:', error);
+    });
+}

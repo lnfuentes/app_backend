@@ -13,6 +13,10 @@ class CartManager {
     getCartById(cartId) {
       return this.carts.find((cart) => cart._id === cartId);
     }
+
+    findByUserId(userId) {
+      return this.carts.find((cart) => cart.userId === userId);
+    }
   
     create() {
       const newCart = {

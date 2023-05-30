@@ -20,10 +20,13 @@ class CartManager {
         return await cartModel.find({_id: cartId});
     }
 
-    async create() {
+    async findByUserId(userId) {
+        return await cartModel.findOne({userId: userId});
+    }
+
+    async create(cart) {
         try{
-            const newCart = new cartModel();
-            await newCart.save();
+            const newCart = await cartModel.create(cart);
             return newCart;
         } catch(error) {
             throw new Error(error);

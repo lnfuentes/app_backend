@@ -8,6 +8,14 @@ const productsCtrl = {};
 const {ProductManager} = DATA;
 const productManager = new ProductManager();
 
+productsCtrl.renderProductsForm = async (req, res) => {
+    if(req.user.role === 'admin') {
+        res.render('admin', {title: 'Admin Page', style: '/css/admin.css'});
+    } else {
+        res.status(403).redirect('/users/login');
+    }
+}
+
 productsCtrl.getProducts = async (req, res) => {
     const stock = req.query.stock;
     const page = req.query.page;
@@ -69,47 +77,56 @@ productsCtrl.getProducts = async (req, res) => {
 
 productsCtrl.createProduct = async (req, res, next) => {
     try {
-        const {title, description, code, price, status, stock, category, thumbnail} = req.body;
-        if(!title || !description || !code || !price || !thumbnail || !category || !status) {
+        const {title, description, code, price, stock, category, thumbnail} = req.body;
+
+        if(!title || !description || !code || !price || !thumbnail || !category) {
             // res.status(400).send({error: 'Faltan Datos'});
             CustomError.createError({
                 name:"Product creation error",
-                cause: generateProductsErrorInfo({title,description,code,price,thumbnail,stock,category,status}),
+                cause: generateProductsErrorInfo({title,description,code,price,thumbnail,stock,category}),
                 message: "Error trying to create Product",
                 code: EErrors.INVALID_TYPES_ERROR
-            })
+            });
         }
 
-        const result = await productManager.create({title, description, code, price, thumbnail, stock, status, category});
-        res.status(200).send({message: "Producto Creado", result});
+        const result = await productManager.create({title, description, code, price, thumbnail, stock, category});
+        if(result) {
+            req.flash('success_msg', 'Producto creado correctamente');
+        }
+        res.status(201).redirect('/api/products/admin');
     } catch (error) {
         next(error);
     }
 }
 
 productsCtrl.deleteProduct = async (req, res) => {
-    const {id} = req.params;
+    const id = req.body;
     id === undefined ? res.status(400).send({error: 'faltan datos'}) : null;
     try {
         const result = await productManager.delete(id);
-        res.status(200).send({message: 'Producto eliminado', result});
+        if(result) {
+            req.flash('success_msg', 'Producto eliminado correctamente');
+        }
+        res.status(200).redirect('/api/products/admin');
     } catch (error) {
         res.status(500).send(error.message);
     }
 }
 
 productsCtrl.updateProduct = async (req, res) => {
-    const {id} = req.params;
     try {
-        const {title, description, code, price, thumbnail, stock, status, category} = req.body;
+        const {id, title, description, code, price, thumbnail, stock, category} = req.body;
         
-        if(!title || !description || !code || !price || !thumbnail || !stock || !category || !status) {
+        if(!id || !title || !description || !code || !price || !thumbnail || !stock || !category) {
             res.status(400).send({error: 'Faltan Datos'});
             return;
         }
         
-        const result = await productManager.findByIdAndUpdate(id, {title, description, code, price, thumbnail, stock, status, category});
-        res.status(200).send({message: 'Producto actualizado', result});
+        const result = await productManager.update(id, {title, description, code, price, thumbnail, stock, category});
+        if(result) {
+            req.flash('success_msg', 'Producto actualizado correctamente');
+        }
+        res.status(200).redirect('/api/products/admin');
     } catch (error) {
         throw new Error(error.message);
     }

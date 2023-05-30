@@ -3,6 +3,11 @@ const mongoose = require('mongoose');
 const cartCollection = 'cart';
 
 const cartSchema = new mongoose.Schema(  {
+  userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+      required: true
+    },
     products: {
       type: [
         {
