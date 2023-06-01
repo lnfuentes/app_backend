@@ -1,7 +1,6 @@
-// const DB_TYPE = 
 const DBManagerMongo = require('./mongo/DBManager.js');
 const DBManagerMemory = require('./memory/DBManager.js');
-const DB_TYPE = require('../config/config.js');
+const {DB_TYPE} = require('../config/config.js');
 
 let DATA;
 

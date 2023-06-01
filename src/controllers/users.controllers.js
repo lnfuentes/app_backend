@@ -42,7 +42,7 @@ usersCtrl.signup = async (req, res) => {
             let info = await transporter.sendMail({
                 from: '"Usuario registrado" <app-backend@gmail.com>', // sender address
                 to: newUser.email, // list of receivers
-                subject: `Bienvenido ${first_name}`, // Subject line
+                subject: `Bienvenido ${newUser.first_name}`, // Subject line
                 html: "<b>Bienvenido a la aplicacion backend</b>", // html body
             });
 
@@ -50,6 +50,7 @@ usersCtrl.signup = async (req, res) => {
             res.status(201).redirect('/users/login');
         }
     } catch (error) {
+        req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()} - Error al crear el usuario`);
         res.status(500).send(error.message);
     }
 }
@@ -76,6 +77,7 @@ usersCtrl.logout = (req, res, next) => {
             res.status(200).redirect('/users/login');
         });
     } catch (error) {
+        req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()} - Error al cerrar sesión`);
         res.status(500).send(error.message);
     }
 }

@@ -12,6 +12,7 @@ productsCtrl.renderProductsForm = async (req, res) => {
     if(req.user.role === 'admin') {
         res.render('admin', {title: 'Admin Page', style: '/css/admin.css'});
     } else {
+        req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()} - Error al renderizar el formulario de productos`);
         res.status(403).redirect('/users/login');
     }
 }
@@ -71,6 +72,7 @@ productsCtrl.getProducts = async (req, res) => {
 
         res.status(200).send({message: 'Productos', result})
     } catch (error) {
+        req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()} - Error al obtener los productos`);
         res.status(500).send(error.message);        
     }
 }
@@ -95,6 +97,7 @@ productsCtrl.createProduct = async (req, res, next) => {
         }
         res.status(201).redirect('/api/products/admin');
     } catch (error) {
+        req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()} - Error al crear el producto`);
         next(error);
     }
 }
@@ -109,6 +112,7 @@ productsCtrl.deleteProduct = async (req, res) => {
         }
         res.status(200).redirect('/api/products/admin');
     } catch (error) {
+        req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()} - Error al eliminar el producto`);
         res.status(500).send(error.message);
     }
 }
@@ -128,6 +132,7 @@ productsCtrl.updateProduct = async (req, res) => {
         }
         res.status(200).redirect('/api/products/admin');
     } catch (error) {
+        req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()} - Error al actualizar el producto`);
         throw new Error(error.message);
     }
 }

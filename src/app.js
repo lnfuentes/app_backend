@@ -11,6 +11,7 @@ const passport = require('passport');
 const compression = require('express-compression');
 const methodOverride = require('method-override');
 const {initializePassport} = require('./config/passport.config.js')
+const addLogger = require('./config/logger.js');
 const errorHandler = require('./middleware/errors/index.js');
 const productRouter = require('./routes/products.routes.js');
 const cartRouter = require('./routes/carts.routes.js');
@@ -18,6 +19,7 @@ const viewsRouter = require('./routes/views.routes.js');
 const usersRouter = require('./routes/users.routes.js');
 const ticketRouter = require('./routes/tickets.routes.js');
 const mockingRouter = require('./routes/mockingProducts.routes.js');
+const loggerTestRouter = require('./routes/logger.routes.js');
 
 // SETTINGS
 dotenv.config();
@@ -49,6 +51,7 @@ app.use(passport.initialize());
 app.use(passport.session())
 app.use(flash());
 app.use(methodOverride('_method'));
+app.use(addLogger);
 
 // STATICS FILES
 app.use(express.static('public'));
@@ -93,4 +96,5 @@ app.use('/api/carts', cartRouter);
 app.use('/users', usersRouter);
 app.use('/tickets', ticketRouter);
 app.use('/mockingProducts', mockingRouter);
+app.use('/loggerTest', loggerTestRouter);
 app.use(errorHandler);
