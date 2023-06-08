@@ -8,10 +8,10 @@ router.get('/admin', isAuthenticated, renderProductsForm);
 
 router.get('/', getProducts);
 
-router.post('/', isAuthenticated, createProduct);
+router.post('/', createProduct);
 
-router.delete('/delete', isAuthenticated, deleteProduct);
+router.delete('/delete', deleteProduct);
 
-router.put('/update', isAuthenticated, updateProduct);
+router.put('/update', updateProduct);
 
 module.exports = router;

@@ -1,0 +1,188 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Productos
+      responses: 
+        "200":
+          description: Los productos fueron obtenidos correctamente desde la base de datos
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o un fallo de conexion con la base de datos
+
+    post: 
+      summary: Recibe un producto y lo crea en la base de datos
+      tags:
+        - Productos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/createProduct"
+      responses:
+        "200":
+          description: Producto creado correctamente
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o un fallo de conexion con la base de datos
+  
+  /api/products/update: 
+    put: 
+      summary: Recibe un id de producto y lo actualiza en la base de datos
+      tags:
+        - Productos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updateProduct"
+      responses:
+        "200":
+          description: Producto actualizado correctamente
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o un fallo de conexion con la base de datos
+
+  /api/products/delete:  
+    delete: 
+      summary: Recibe un id de producto y lo elimina en la base de datos
+      tags:
+        - Productos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/deleteProduct"
+      responses:
+        "200":
+          description: Producto eliminado correctamente
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o un fallo de conexion con la base de datos
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado por mongo
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripcion del producto
+        code:
+          type: String
+          description: Codigo unico del producto
+        price:
+          type: Number
+          description: Precio del producto
+        thumbnail:
+          type: String
+          description: Url de la imagen del producto
+        stock:
+          type: Number
+          description: Cantidad de stock del producto
+        category:
+          type: String
+          description: Categoria del producto
+        status:
+          type: Boolean
+          description: True o False indicando el estado del producto
+      example:
+        _id: ObjectId("54759eb3c090d83494e2d804")
+        title: Notebook
+        description: Notebook Lenovo
+        code: FAD54
+        price: 1000
+        thumbnail: http://notebook.com
+        stock: 500
+        category: Electronica
+        status: true
+
+  requestBodies:
+    createProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripcion del producto
+        code:
+          type: string
+          description: Codigo unico del producto
+        price:
+          type: number
+          description: Precio del producto
+        thumbnail:
+          type: string
+          description: Url de la imagen del producto
+        stock:
+          type: number
+          description: Cantidad de stock del producto
+        category:
+          type: string
+          description: Categoria del producto
+        status:
+          type: boolean
+          description: True o False indicando el estado del producto
+      example:
+        title: Notebook
+        description: Notebook Lenovo
+        code: FAD54
+        price: 1000
+        thumbnail: http://notebook.com
+        stock: 500
+        category: Electronica
+        status: true
+
+    updateProduct:
+      type: object
+      properties:
+        id: 
+          type: string
+          description: ID del producto a actualizar
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripcion del producto
+        code:
+          type: string
+          description: Codigo unico del producto
+        price:
+          type: number
+          description: Precio del producto
+        thumbnail:
+          type: string
+          description: Url de la imagen del producto
+        stock:
+          type: number
+          description: Cantidad de stock del producto
+        category:
+          type: string
+          description: Categoria del producto
+      example:
+        id: 54759eb3c090d83494e2d804
+        title: Notebook
+        description: Notebook Lenovo
+        code: FAD54
+        price: 1000
+        thumbnail: http://notebook.com
+        stock: 500
+        category: Electronica
+    
+    deleteProduct:
+      type: string
+      properties:
+        id:
+          type: string
+          description: ID del producto a eliminar
+      example:
+        id: 54759eb3c090d83494e2d804

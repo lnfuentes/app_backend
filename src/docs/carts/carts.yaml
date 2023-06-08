@@ -1,0 +1,238 @@
+paths:
+  /api/carts:
+    get:
+      summary: Obtiene todos los carritos
+      tags:
+        - Carritos
+      responses: 
+        "200":
+          description: Los carritos fueron obtenidos correctamente desde la base de datos
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o un fallo de conexion con la base de datos
+
+    post:
+      summary: Crea un carrito en la base de datos
+      tags:
+        - Carritos
+      responses:
+        "200":
+          description: Carrito creado correctamente
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o un fallo de conexion con la base de datos
+
+  /api/carts/{cid}:
+    get:
+      summary: Obtiene un carrito con id especifico
+      tags:
+        - Carritos
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito a obtener
+        schema:
+          $type: string
+      responses:
+        "200":
+          description: Carrito obtenido correctamente
+        "500": 
+          description: Error interno del servidor, usualmente generado por una query defectuosa o un fallo de conexion con la base de datos
+
+    put:
+      summary: Actualiza el carrito obtenido por id
+      tags:
+        - Carritos
+      parameters:
+      - name: cid
+        in: path
+        required: true 
+        description: id del carrito a actualizar
+        schema:
+          $type: string
+      requestBody:
+        required: true 
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/updateCart"
+      responses:
+        "200":
+          description: Carrito actualizado correctamente
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o un fallo de conexion con la base de datos
+    
+    delete:
+      summary: Elimina el carrito de la base de datos
+      tags: 
+        - Carritos
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito a eliminar
+        schema: 
+          $type: string
+      responses:
+        "200":
+          description: Carrito eliminado con éxito
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o un fallo de conexion con la base de datos
+
+  /api/carts/{cid}/products:
+    delete:
+      summary: Elimina todos los productos del carrito
+      tags:
+        - Carritos
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito donde se van a eliminar todos los productos
+        schema: 
+          $type: string
+      responses:
+        "200":
+          description: Carrito actualizado correctamente
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o un fallo de conexion con la base de datos
+
+  /api/carts/{cid}/products/{pid}:
+    put:
+      summary: Modifica la cantidad (quantity) de un producto
+      tags:
+        - Carritos
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: Id del carrito donde se encuentra el producto a modificar
+        schema: 
+          $type: string
+      - name: pid
+        in: path
+        required: true
+        description: Id del producto a modificar
+        schema: 
+          $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updateProductQuantity"
+      responses:
+        "200":
+          description: Carrito actualizado correctamente
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o un fallo de conexion con la base de datos
+    
+    delete:
+      summary: Elimina un producto del carrito
+      tags:
+        - Carritos
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito donde se va a eliminar el producto
+        schema: 
+          $type: string
+      - name: pid
+        in: path
+        required: true
+        description: id del producto a eliminar
+        schema: 
+          $type: string
+      responses:
+        "200":
+          description: Carrito actualizado correctamente
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o un fallo de conexion con la base de datos
+    
+
+  /api/carts/{cid}/{pid}:
+    post:
+      summary: Añade un producto a un carrito especifico
+      tags:
+        - Carritos
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito donde se va a añadir un producto
+        schema: 
+          $type: string
+      - name: pid
+        in: path
+        required: true
+        description: id del producto a agregar
+        schema: 
+          $type: string
+      responses:
+        "200":
+          description: Carrito actualizado correctamente
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o un fallo de conexion con la base de datos
+    
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado por mongo
+        products:
+          type: array
+          description: Array de productos del carrito
+          items:
+            type: object
+            properties:
+              product:
+                type: ObjectId
+                description: Id del producto
+                example: 54759eb3c090d83494e2d804
+              quantity:
+                type: number
+                description: cantidad del producto en el carrito
+                example: 5
+      example:
+        _id: ObjectId("54759eb3c090d83494e2d804")
+        products: [
+                {
+            "product": "54759eb3c090d83235f5d804",
+            "quantity": 3,
+            "_id": "54759eb3c526h83494e2d804"
+            },
+            {
+              "product": "54759eb3c090d8653se2d804",
+              "quantity": 9,
+              "_id": "54796sb3c090d83494e2d804"
+            }
+        ]
+
+  requestBodies:
+    updateCart:
+      type: object
+      properties:
+        products:
+          type: array
+          description: Array de productos que contiene el carrito
+      example:
+        products:
+          - {
+            product: ObjectId("54759eb3c090d83494e2d804"),
+            quantity: 10
+          }
+          - {
+            product: ObjectId("54759eb3c090d83494e2d695"),
+            quantity: 3
+          }
+    
+    updateProductQuantity:
+      type: object
+      properties:
+        quantity:
+          type: number
+          description: cantidad a modificar del producto
+          example: 20

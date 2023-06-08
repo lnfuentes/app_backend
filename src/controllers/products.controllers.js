@@ -95,7 +95,8 @@ productsCtrl.createProduct = async (req, res, next) => {
         if(result) {
             req.flash('success_msg', 'Producto creado correctamente');
         }
-        res.status(201).redirect('/api/products/admin');
+        res.status(200).send({message: 'producto creado correctamente'})
+        // res.status(201).redirect('/api/products/admin');
     } catch (error) {
         req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()} - Error al crear el producto`);
         next(error);
@@ -103,14 +104,15 @@ productsCtrl.createProduct = async (req, res, next) => {
 }
 
 productsCtrl.deleteProduct = async (req, res) => {
-    const id = req.body;
+    const id = req.body.id;
     id === undefined ? res.status(400).send({error: 'faltan datos'}) : null;
     try {
         const result = await productManager.delete(id);
         if(result) {
             req.flash('success_msg', 'Producto eliminado correctamente');
         }
-        res.status(200).redirect('/api/products/admin');
+        res.status(200).send({message: 'producto eliminado correctamente'})
+        // res.status(200).redirect('/api/products/admin');
     } catch (error) {
         req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()} - Error al eliminar el producto`);
         res.status(500).send(error.message);
@@ -130,7 +132,8 @@ productsCtrl.updateProduct = async (req, res) => {
         if(result) {
             req.flash('success_msg', 'Producto actualizado correctamente');
         }
-        res.status(200).redirect('/api/products/admin');
+        res.status(200).send({message: 'producto actualizado correctamente'})
+        // res.status(200).redirect('/api/products/admin');
     } catch (error) {
         req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()} - Error al actualizar el producto`);
         throw new Error(error.message);

@@ -10,6 +10,8 @@ const session = require('express-session');
 const passport = require('passport');
 const compression = require('express-compression');
 const methodOverride = require('method-override');
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUiExpress = require('swagger-ui-express');
 const {initializePassport} = require('./config/passport.config.js')
 const addLogger = require('./config/logger.js');
 const errorHandler = require('./middleware/errors/index.js');
@@ -27,7 +29,18 @@ const app = express();
 const {SERV_PORT, USER_MONGO, PASS_MONGO, DB_MONGO} = process.env;
 const stringCollection =`mongodb+srv://${USER_MONGO}:${PASS_MONGO}@coder-cluster.ncl2vhs.mongodb.net/${DB_MONGO}?retryWrites=true&w=majority`;
 initializePassport();
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: 'Documentacion de app-backend',
+            description: 'API de app-backend'
+        }
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+}
 
+const specs = swaggerJsdoc(swaggerOptions);
 
 app.set('view engine', 'ejs');
 app.engine('handlebars', engine({
@@ -91,6 +104,7 @@ app.use((req, res, next) => {
 
 // ROUTES
 app.use(viewsRouter);
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/users', usersRouter);
