@@ -102,7 +102,10 @@ const addToCart = (cartId, productId) => {
   fetch(`/api/carts/${cartId}/${productId}`, options)
     .then(response => {
       if (response.ok) {
-        console.log('Producto agregado al carrito');
+        Swal.fire(
+          'Producto añadido!',
+          'success'
+        )
       }
     })
     .catch(error => {
