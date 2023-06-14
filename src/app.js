@@ -78,7 +78,7 @@ app.use(express.static('public'));
 
 // SERVER 
 const server = app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${SERV_PORT}`)
+    console.log(`Servidor corriendo en http://localhost:${PORT}`)
 });
 
 server.on('error', error => console.log(`Error en el servidor: ${error}`));
