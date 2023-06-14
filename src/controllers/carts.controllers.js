@@ -1,9 +1,12 @@
 const DATA = require('../dao/factory.js');
+const transporter = require('../config/mailer.js');
+const Crypto = require('crypto');
 const cartsCtrl = {};
 
-const {CartManager, ProductManager} = DATA;
+const {CartManager, ProductManager, TicketManager} = DATA;
 const cartManager = new CartManager();
 const productManager = new ProductManager();
+const ticketManager = new TicketManager();
 
 cartsCtrl.getCarts = async (req, res) => {
     try {
@@ -125,6 +128,44 @@ cartsCtrl.updateProductQuantity = async (req, res) => {
     } catch (error) {
         req.logger.info(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()} - Error al actualizar la cantidad`);
         res.status(500).send(error.message);
+    }
+}
+
+cartsCtrl.purchase = async (req, res) => {
+    const myTicket = {
+        code: Crypto.randomBytes(16).toString('hex').substring(0, 4),
+        purchase_datatime: new Date(),
+        amount: req.session.amount,
+        purchaser: res.locals.user.first_name + ' ' + res.locals.user.last_name,
+        created_at: new Date()
+    }
+    
+    try {
+        const ticket = ticketManager.create(myTicket);
+        transporter.sendMail({
+            from: '"APP-BACKEND" <app-backend@gmail.com>', // sender address
+            to: res.locals.user.email, // list of receivers
+            subject: 'Compra realizada', // Subject line
+            html: `
+                <b>¡Gracias por tu compra!</b>
+                <p>Estimado(a) ${res.locals.user.first_name} ${res.locals.user.last_name},</p>
+                <p>Tu compra ha sido procesada exitosamente.</p>
+                <p>A continuacion enviamos el ticket de compra</p>
+                <ul>
+                    <li>Codigo: ${myTicket.code}</li>
+                    <li>Hora de Compra: ${myTicket.purchase_datatime}</li>
+                    <li>Total: $${myTicket.amount}</li>
+                    <li>Comprador: ${myTicket.purchaser}</li>
+                    <li>${myTicket.created_at}</li>
+            `, // html body
+        });
+        req.logger.info(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()} - Ticket creado`);
+        req.flash('success_msg', 'Compra realizada con éxito');
+        await cartManager.deleteAllProducts(req.session.cartId);
+        res.status(201).redirect('/');
+    } catch (error) {
+        req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()} - Error al crear el ticket`);
+        res.status(500).json({error: error.message});
     }
 }
 

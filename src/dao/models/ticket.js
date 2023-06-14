@@ -3,17 +3,6 @@ const mongoose = require('mongoose');
 const ticketCollection = 'tickets';
 
 const ticketSchema = new mongoose.Schema({
-    products: {
-        type: [
-            {
-                product: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'products'
-                },
-                quantity: Number
-            }
-        ]
-    },
     code: {
         type: String,
         required: true,
@@ -21,7 +10,7 @@ const ticketSchema = new mongoose.Schema({
     },
     purchase_datetime: Date,
     amount: {
-        type: Number,
+        type: String,
         required: true
     },
     purchaser: String,

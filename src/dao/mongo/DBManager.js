@@ -176,19 +176,54 @@ class ProductManager {
 }
 
 class UserManager {
+    async read(filter) {
+        try {
+            const users = await userModel.find(filter);
+            return users;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
     async create(user) {
-        const newUser = await userModel.create(user);
-        return newUser;
+        try {
+            const newUser = await userModel.create(user);
+            return newUser;
+        } catch (error) {
+            throw new Error(error)
+        }
     }
 
     async findOne(user) {
-        const OneUser = await userModel.findOne(user);
-        return OneUser;
+        try {
+            const OneUser = await userModel.findOne(user);
+            return OneUser;
+        } catch (error) {
+            throw new Error(error)
+        }
     }
 
     async findById(id) {
-        const userById = await userModel.findById(id);
-        return userById;
+        try {
+            const userById = await userModel.findById(id);
+            return userById;
+        } catch (error) {
+            throw new Error(error)
+        }
+    }
+
+    async findByIdAndUpdate(id, updatedData) {
+        try {
+            const updatedUser = await userModel.findByIdAndUpdate(id, updatedData, { new: true });
+            return updatedUser;
+        } catch (error) {
+            throw new Error(error)
+        }
+    }
+
+    async deleteMany(filter) {
+        const result = await userModel.deleteMany(filter);
+        return result;
     }
 }
 

@@ -9,6 +9,4 @@ router.get('/', isAuthenticated, getTickets);
 
 router.get('/:tid', isAuthenticated, getSpecificTicket);
 
-router.post('/:cid/purchase', isAuthenticated, createTicket);
-
 module.exports = router;

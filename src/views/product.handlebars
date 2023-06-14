@@ -3,19 +3,23 @@
     <div class="line"></div>
 </div>
 
-<div class="card mb-3" style="max-width: 700px;">
-  <div class="row g-0">
-    <div class="col-md-4">
-      <img src={{product.thumbnail}} class="img-fluid rounded-start" alt="...">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h2>{{ product.title }}</h2>
-        <p class="card-text price">{{ product.price }}</p>
-        <p class="card-text description">{{ product.description }}</p>
-        <p class="card-text category">{{ product.category }}</p>
-        <a href="#" id="add-to-cart" data-cid={{cid}} data-pid={{pid}}>Añadir al carrito</a>
+{{#if product}}
+  <div class="card mb-3 product" style="max-width: 700px;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src={{product.thumbnail}} class="img-fluid rounded-start" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h2>{{ product.title }}</h2>
+          <p class="card-text price">{{ product.price }}</p>
+          <p class="card-text description">{{ product.description }}</p>
+          <p class="card-text category">{{ product.category }}</p>
+          <a href="#" id="add-to-cart" data-cid={{cid}} data-pid={{pid}}>Añadir al carrito</a>
+        </div>
       </div>
     </div>
   </div>
-</div>
+{{else}}
+  <h2>Debe iniciar sesión.</h2>
+{{/if}}

@@ -1,7 +1,8 @@
 const DATA = require('../dao/factory.js');
 
-const {CartManager} = DATA;
+const {CartManager, UserManager} = DATA;
 const cartManager = new CartManager();
+const userManager = new UserManager()
 
 const redirectByRole = async (req, res) => {
     if (req.user.role === 'admin') {
@@ -14,6 +15,7 @@ const redirectByRole = async (req, res) => {
                 cart = await cartManager.create({ userId: req.user._id, products: [] });
             }
             req.session.cartId = cart._id;
+            await userManager.findByIdAndUpdate({_id: req.user._id.valueOf()}, {last_connection: new Date()});
             return res.redirect('/');
         } catch (error) {
             req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()} - Problemas con el rol usuario`);
@@ -25,7 +27,7 @@ const redirectByRole = async (req, res) => {
 }
 
 const isAuthenticated = (req, res, next) => {
-    if(req.isAuthenticated()) {
+    if(req.isAuthenticated() && req.user.role === 'admin') {
         return next();
     }
     req.logger.warning(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()} - Usuario sin autenticar`);

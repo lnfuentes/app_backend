@@ -5,10 +5,21 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        {{#ifEquals user.role 'admin'}}
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/apidocs">Documentacion</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="/api/users/admin">Usuarios</a>
+                </li>
+            </ul>
+        {{/ifEquals}}
+
         {{#if user}}
             <ul class="navbar-nav">
                 <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="#">Carrito</a>
+                <a class="nav-link" aria-current="page" href="/cart">Carrito</a>
                 </li>
                 <li class="nav-item">
                 <a class="nav-link" href="/users/logout">Cerrar sesión</a>
@@ -23,7 +34,7 @@
                 <a class="nav-link" href="/users/signup">Signup</a>
                 </li>
             </ul>
-      {{/if}}
+        {{/if}}
     </div>
   </div>
 </nav>

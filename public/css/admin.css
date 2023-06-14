@@ -28,3 +28,27 @@
 input{
     margin-bottom: 20px;
 }
+
+.user{
+    margin: 20px;
+}
+
+.user span {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.btn-admin {
+    display: inline;
+    margin-bottom: 30px;
+    background-color: black;
+    color: white;
+    border: none;
+    margin-top: 20px;
+    border-radius: 4px;
+    padding: 10px 20px;
+}
+
+.form-user{
+    max-width: 300px;
+}

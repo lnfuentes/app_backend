@@ -13,7 +13,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'user'
     },
-    age: Number
+    age: Number,
+    last_connection: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const userModel = mongoose.model(userCollection, userSchema);

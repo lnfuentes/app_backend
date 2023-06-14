@@ -3,6 +3,7 @@ const DATA = require('../dao/factory.js');
 const CustomError = require('../services/error/customError.js');
 const EErrors = require('../services/error/enum.js');
 const generateProductsErrorInfo = require('../services/error/info.js');
+const transporter = require('../config/mailer.js');
 const productsCtrl = {};
 
 const {ProductManager} = DATA;
@@ -91,7 +92,14 @@ productsCtrl.createProduct = async (req, res, next) => {
             });
         }
 
-        const result = await productManager.create({title, description, code, price, thumbnail, stock, category});
+        let owner;
+        if(res.locals.user) {
+            if(res.locals.user.role === 'premium') {
+                owner = res.locals.user.email;
+            }
+        }
+
+        const result = await productManager.create({owner, title, description, code, price, thumbnail, stock, category});
         if(result) {
             req.flash('success_msg', 'Producto creado correctamente');
         }
@@ -107,9 +115,20 @@ productsCtrl.deleteProduct = async (req, res) => {
     const id = req.body.id;
     id === undefined ? res.status(400).send({error: 'faltan datos'}) : null;
     try {
-        const result = await productManager.delete(id);
-        if(result) {
-            req.flash('success_msg', 'Producto eliminado correctamente');
+        const productExist = await productManager.findById(id);
+        if (productExist) {
+            if(productExist.owner != 'admin') {
+                transporter.sendMail({
+                    from: '"APP-BACKEND" <app-backend@gmail.com>', // sender address
+                    to: productExist.owner, // list of receivers
+                    subject: 'Eliminación del producto', // Subject line
+                    html: "<b>Lamentamos comunicarte que tu producto ha sido eliminado.</b>", // html body
+                });
+            }
+            const result = await productManager.delete(id);
+            if(result) {
+                req.flash('success_msg', 'Producto eliminado correctamente');
+            }
         }
         res.status(200).send({message: 'producto eliminado correctamente'})
         // res.status(200).redirect('/api/products/admin');

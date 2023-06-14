@@ -149,6 +149,22 @@ class UserManager {
     const foundUser = this.users.find((u) => u.id === id);
     return foundUser;
   }
+
+  findByIdAndUpdate(id, update) {
+    const userIndex = this.users.findIndex((u) => u.id === id);
+    if (userIndex !== -1) {
+      const updatedUser = { ...this.users[userIndex], ...update };
+      this.users[userIndex] = updatedUser;
+      return updatedUser;
+    }
+    return null;
+  }
+
+  deleteMany(filter) {
+    const deletedUsers = this.users.filter((user) => !filter(user));
+    this.users = deletedUsers;
+    return deletedUsers.length;
+  }
 }
 
 class TicketManager {

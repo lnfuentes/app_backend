@@ -4,6 +4,7 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const productCollection = 'products';
 
 const productSchema = new mongoose.Schema({
+    owner: {type: String, default: 'admin'},
     title: {type: String, required: true},
     description: {type: String, required: true},
     price: {type: Number, required: true},

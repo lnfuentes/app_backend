@@ -1,7 +1,7 @@
 const {Router} = require('express');
 const router = Router();
 
-const {getCarts ,getCartId, createCart, addProductCart, deleteCart, deleteCartProduct, deleteAllProducts, updateCart, updateProductQuantity} = require('../controllers/carts.controllers.js');
+const {getCarts ,getCartId, createCart, addProductCart, deleteCart, deleteCartProduct, deleteAllProducts, updateCart, updateProductQuantity, purchase} = require('../controllers/carts.controllers.js');
 
 router.get('/', getCarts);
 
@@ -10,6 +10,8 @@ router.get('/:cid', getCartId);
 router.post('/', createCart);
 
 router.post("/:cid/:pid", addProductCart);
+
+router.post('/purchase/', purchase);
 
 router.delete('/:cid', deleteCart);
 

@@ -14,6 +14,7 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUiExpress = require('swagger-ui-express');
 const {initializePassport} = require('./config/passport.config.js')
 const addLogger = require('./config/logger.js');
+const {isAuthenticated} = require('./middleware/auth.js')
 const errorHandler = require('./middleware/errors/index.js');
 const productRouter = require('./routes/products.routes.js');
 const cartRouter = require('./routes/carts.routes.js');
@@ -22,6 +23,7 @@ const usersRouter = require('./routes/users.routes.js');
 const ticketRouter = require('./routes/tickets.routes.js');
 const mockingRouter = require('./routes/mockingProducts.routes.js');
 const loggerTestRouter = require('./routes/logger.routes.js');
+const apiUsersRouter = require('./routes/apiUsers.routes.js');
 
 // SETTINGS
 dotenv.config();
@@ -44,7 +46,12 @@ const specs = swaggerJsdoc(swaggerOptions);
 
 app.set('view engine', 'ejs');
 app.engine('handlebars', engine({
-    handlebars: allowInsecurePrototypeAccess(Handlebars)
+    handlebars: allowInsecurePrototypeAccess(Handlebars),
+    helpers: {
+        ifEquals: function(arg1, arg2, options) {
+          return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+        }
+    }
 }))
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
@@ -104,11 +111,12 @@ app.use((req, res, next) => {
 
 // ROUTES
 app.use(viewsRouter);
-app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
+app.use('/apidocs', isAuthenticated, swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
+app.use('/api/users', apiUsersRouter);
 app.use('/users', usersRouter);
 app.use('/tickets', ticketRouter);
 app.use('/mockingProducts', mockingRouter);
 app.use('/loggerTest', loggerTestRouter);
-app.use(errorHandler);
+// app.use(errorHandler);
