@@ -37,7 +37,7 @@ const fetchProducts = async () => {
     if(product.stock === 0){
       return `
               <div class="card col-3 gap product">
-                <img src="${product.thumbnail}" class="card-img-top" alt="...">
+                <img src="${product.thumbnail}" class="card-img-top pt-2" alt="...">
                 <div class="card-body">
                   <h4 class="card-title">${product.title}</h4>
                   <p class="card-text">${product.description}</p>
@@ -49,7 +49,7 @@ const fetchProducts = async () => {
     } else {
       return `
               <div class="card col-3 gap product">
-                <img src="${product.thumbnail}" class="card-img-top" alt="...">
+                <img src="${product.thumbnail}" class="card-img-top pt-2" alt="...">
                 <div class="card-body">
                   <h4 class="card-title">${product.title}</h4>
                   <p class="card-text">${product.description}</p>
