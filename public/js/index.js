@@ -30,7 +30,7 @@ const fetchProducts = async () => {
   const url = getCurrentURL()
   const params = getParameters(url);
   const query = convertParamsToQuery(params)
-  const response = await fetch(`http://localhost:8080/api/products?${query}`);
+  const response = await fetch(`/api/products?${query}`);
   const data = await response.json();
   const myElement = document.getElementById("contenidoProductos");
   myElement.innerHTML = data.result.payload.map((product) => {
@@ -64,22 +64,6 @@ const fetchProducts = async () => {
 }  
 
 elementExist('contenidoProductos') && fetchProducts();
-
-const fetchCart = async () => {
-  const response = await fetch(`http://localhost:8080/cart`);
-  const data = await response.json();
-  const myElement = document.getElementById("contenidoCarrito");
-  data[0].products.forEach(p => {
-    return myElement.innerHTML = `
-      <div>
-        <p>${p.product.title}</p>
-        <p>${p.quantity}</p>
-      </div>
-  `
-  })
-}
-
-elementExist('contenidoCarrito') && fetchCart();
 
 const addToCartLink = document.getElementById('add-to-cart');
 if(addToCartLink) {
@@ -119,7 +103,7 @@ if(fetchUsersBtn) {
   fetchUsersBtn.addEventListener('click', async e => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8080/api/users/');
+      const response = await fetch('/api/users/');
       if (!response.ok) {
         throw new Error('Error en la solicitud');
       }
