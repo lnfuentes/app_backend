@@ -28,7 +28,7 @@ const apiUsersRouter = require('./routes/apiUsers.routes.js');
 // SETTINGS
 dotenv.config();
 const app = express();
-const {SERV_PORT, USER_MONGO, PASS_MONGO, DB_MONGO} = process.env;
+const {PORT, USER_MONGO, PASS_MONGO, DB_MONGO} = process.env;
 const stringCollection =`mongodb+srv://${USER_MONGO}:${PASS_MONGO}@coder-cluster.ncl2vhs.mongodb.net/${DB_MONGO}?retryWrites=true&w=majority`;
 initializePassport();
 const swaggerOptions = {
@@ -77,7 +77,7 @@ app.use(addLogger);
 app.use(express.static('public'));
 
 // SERVER 
-const server = app.listen(SERV_PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${SERV_PORT}`)
 });
 
@@ -119,4 +119,4 @@ app.use('/users', usersRouter);
 app.use('/tickets', ticketRouter);
 app.use('/mockingProducts', mockingRouter);
 app.use('/loggerTest', loggerTestRouter);
-// app.use(errorHandler);
+app.use(errorHandler);
