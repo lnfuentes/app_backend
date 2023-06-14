@@ -88,8 +88,9 @@ const addToCart = (cartId, productId) => {
       if (response.ok) {
         Swal.fire(
           'Producto añadido!',
+          'El producto se encuentra añadido en el carrito.',
           'success'
-        )
+        );
       }
     })
     .catch(error => {
